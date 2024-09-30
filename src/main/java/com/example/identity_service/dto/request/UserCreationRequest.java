@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE) // Moi cai field khong xac dinh thi mac dinh la PRIVATE
     public class UserCreationRequest {
-        @Size(min = 3, message = "USERNAME_INVALID") //Api cua string bat buoc phai truyen vao const nen truyen String vao cho co thoi
+        @Size(min = 4, message = "USERNAME_INVALID") //Api cua string bat buoc phai truyen vao const nen truyen String vao cho co thoi
         String username;
         @Size(min = 8, message = "PASSWORD_INVALID") // De tren cai nao thi no ap dung vo cai do
         String password;
