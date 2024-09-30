@@ -4,8 +4,6 @@ import java.text.ParseException;
 import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.example.identity_service.dto.request.IntrospectRequest;
-import com.example.identity_service.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -15,6 +13,8 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
+import com.example.identity_service.dto.request.IntrospectRequest;
+import com.example.identity_service.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 
 @Component
@@ -32,16 +32,16 @@ public class CustomJwtDecoder implements JwtDecoder {
 
         try {
             var response = authenticationService.introspect(
-                    IntrospectRequest.builder().token(token).build()); //Lấy giá trị của introspect
+                    IntrospectRequest.builder().token(token).build()); // Lấy giá trị của introspect
 
             if (!response.isValid())
-                throw new JwtException("Token invalid"); //Check xem token có còn hiệu lực hay không?
+                throw new JwtException("Token invalid"); // Check xem token có còn hiệu lực hay không?
         } catch (JOSEException | ParseException e) {
             throw new JwtException(e.getMessage());
         }
 
-        //Nếu token còn hiệu lực thì mới thực hiện lệnh dưới
-        if (Objects.isNull(nimbusJwtDecoder)) { //Xác thực token, build token theo spring security
+        // Nếu token còn hiệu lực thì mới thực hiện lệnh dưới
+        if (Objects.isNull(nimbusJwtDecoder)) { // Xác thực token, build token theo spring security
             SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
             nimbusJwtDecoder = NimbusJwtDecoder.withSecretKey(secretKeySpec)
                     .macAlgorithm(MacAlgorithm.HS512)

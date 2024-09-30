@@ -1,8 +1,9 @@
 package com.example.identity_service.dto.request;
 
+import org.springframework.web.bind.annotation.RestController;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Data

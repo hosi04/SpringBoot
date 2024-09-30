@@ -1,21 +1,23 @@
 package com.example.identity_service.controller;
 
-import com.example.identity_service.dto.request.UserCreationRequest;
-import com.example.identity_service.dto.request.UserUpdateRequest;
-import com.example.identity_service.dto.response.ApiResponse;
-import com.example.identity_service.dto.response.UserResponse;
-import com.example.identity_service.entity.User;
-import com.example.identity_service.service.UserService;
+import java.util.List;
+
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.identity_service.dto.request.UserCreationRequest;
+import com.example.identity_service.dto.request.UserUpdateRequest;
+import com.example.identity_service.dto.response.ApiResponse;
+import com.example.identity_service.dto.response.UserResponse;
+import com.example.identity_service.service.UserService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/users")
@@ -36,10 +38,11 @@ public class UserController {
     }
 
     @GetMapping
-    ApiResponse<List<UserResponse>> getUsers(){
-        var authentication = SecurityContextHolder.getContext().getAuthentication(); //Chua thong tin user dang nhap hien tai
+    ApiResponse<List<UserResponse>> getUsers() {
+        var authentication =
+                SecurityContextHolder.getContext().getAuthentication(); // Chua thong tin user dang nhap hien tai
 
-        //Log ra USER nao va co ROLE la gi khi thuc hien tao tac nay
+        // Log ra USER nao va co ROLE la gi khi thuc hien tao tac nay
         log.info("Username: {}", authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
         return ApiResponse.<List<UserResponse>>builder()
@@ -48,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping("/myInfo")
-    ApiResponse<UserResponse> getMyInfo(){
+    ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getMyInfo())
                 .build();
@@ -66,5 +69,4 @@ public class UserController {
         userService.deleteUser(userId);
         return ApiResponse.<String>builder().result("User has been deleted").build();
     }
-
 }
